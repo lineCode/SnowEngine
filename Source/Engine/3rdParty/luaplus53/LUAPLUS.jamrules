@@ -1,0 +1,298 @@
+if ! $(LUA_VERSION) {
+    local dirs = [ Glob $(LUAPLUS)/Src/LuaPlus : */ : 1 ] ;
+    dirs = $(dirs:P) ;
+    dirs = $(dirs:B) ;
+
+    # Choose the latest version.
+    dirs = [ FReverse [ ListSort $(dirs) : 0 ] ] ;
+#    if $(dirs[2]) {
+#        Echo LUA_VERSION needs to be passed in from the command-line. ;
+#        Echo ;
+#        Echo "    jam LUA_VERSION=lua53-luaplus" ;
+#        Echo ;
+#        Echo "Available versions:" $(dirs) ;
+#        Exit ;
+#    }
+    LUA_VERSION = $(dirs[1]) ;
+}
+
+LUA_VERSION ?= lua51-luaplus ;
+
+
+###############################################################################
+# Set these if the user didn't use jam --workspace.
+C.CompileOptions outputastree ;
+
+if [ Glob $(CWD) : LUAPLUS.jamrules ] {
+    ALL_LOCATE_TARGET ?= $(LUAPLUS)/.build/obj.$(LUA_VERSION).$(C.COMPILER).$(PLATFORM).$(CONFIG) ;
+}
+
+LUAPLUS_OUTPUT_DIRECTORY ?= $(LUAPLUS)/.build/bin.$(LUA_VERSION).$(C.COMPILER).$(PLATFORM) ;
+
+DEPCACHE.standard ?= $(ALL_LOCATE_TARGET)/.depcache ;
+DEPCACHE ?= standard ;
+
+LUA_SOURCE_DIRECTORY_NAME = $(LUA_VERSION) ;
+LUAPLUS_INCLUDE_DIRECTORIES = $(LUAPLUS)/Src $(LUAPLUS)/Src/LuaPlus/$(LUA_SOURCE_DIRECTORY_NAME)/src ;
+
+NotFile download ;
+
+rule LuaPlusDefines TARGET
+{
+	if $(OS) in LINUX FREEBSD
+	{
+		C.Defines $(TARGET) : LUA_USE_LINUX ;
+	}
+}
+
+rule LuaPlusFixUpTarget TARGET
+{
+	LuaPlusDefines $(TARGET) ;
+	if $(CONFIG) = debug {
+		C.OutputPostfix $(TARGET) : .debug ;
+	} else {
+		C.OutputPostfix $(TARGET) : ;
+	}
+
+	# If C.OutputPath * was used, then use its location.
+	#local outputPath = $(LOCATE:Z=$(C.ACTIVE_TOOLCHAIN_*)) ;
+	#C.OutputPath $(TARGET) : $(outputPath:E=$(LUAPLUS_OUTPUT_DIRECTORY)) ;
+	C.OutputPath $(TARGET) : $(LUAPLUS_OUTPUT_DIRECTORY) ;
+}
+
+###############################################################################
+
+if $(OS) = NT {
+	if $(LUA_VERSION) in lua51-luaplus lua52-luaplus lua53-luaplus {
+		LUA_CDIR = $(LUAPLUS_OUTPUT_DIRECTORY)/modules ;
+	} else {
+		LUA_CDIR = $(LUAPLUS_OUTPUT_DIRECTORY) ;
+	}
+	LUA_LDIR = $(LUAPLUS_OUTPUT_DIRECTORY)/lua ;
+} else {
+	if $(LUA_VERSION) in lua51-luaplus {
+		LUA_CDIR = $(LUAPLUS_OUTPUT_DIRECTORY)/lib/lua/5.1 ;
+		LUA_LDIR = $(LUAPLUS_OUTPUT_DIRECTORY)/share/lua/5.1 ;
+	} else if $(LUA_VERSION) in lua52-luaplus {
+		LUA_CDIR = $(LUAPLUS_OUTPUT_DIRECTORY)/lib/lua/5.2 ;
+		LUA_LDIR = $(LUAPLUS_OUTPUT_DIRECTORY)/share/lua/5.2 ;
+	} else if $(LUA_VERSION) in lua53-luaplus {
+		LUA_CDIR = $(LUAPLUS_OUTPUT_DIRECTORY)/lib/lua/5.3 ;
+		LUA_LDIR = $(LUAPLUS_OUTPUT_DIRECTORY)/share/lua/5.3 ;
+	} else {
+		LUA_CDIR = $(LUAPLUS_OUTPUT_DIRECTORY) ;
+		LUA_LDIR = $(LUAPLUS_OUTPUT_DIRECTORY) ;
+	}
+}
+
+rule LuaPlus.CModule TARGET : OUTPUT_NAME : SOURCES : MODULES_SUBDIR {
+	SubInclude LUAPLUS Src LuaPlus : LuaPlusSharedLib ;
+
+	TARGET = [ ActiveTarget $(TARGET) ] ;
+
+	Depends all : $(TARGET) ;
+
+	LuaPlusDefines $(TARGET) ;
+	C.IncludeDirectories $(TARGET) : $(LUAPLUS_INCLUDE_DIRECTORIES) ;
+
+	if ! $(OS) in MACOSX LINUX FREEBSD {
+		C.LinkLibraries $(TARGET) : $(LUA_VERSION) ;
+	}
+
+	OUTPUT_NAME ?= $(TARGET) ;
+
+	local MODULES_SUBDIR = $(OUTPUT_NAME[1]:D) ;
+	OUTPUT_NAME = $(OUTPUT_NAME[1]:D=) $(OUTPUT_NAME[2]) ;
+
+	if $(MSVCNT) {
+		local EXPORT_NAME = $(OUTPUT_NAME[2]:E=$(OUTPUT_NAME[1])) ;
+		local exportName = [ Subst $(EXPORT_NAME) : %. : _ ] ;
+		local exportPath = [ Subst $(MODULES_SUBDIR:E="") : / : _ ] ;
+		if $(exportPath) != "" {
+			exportPath = $(exportPath)_ ;
+		}
+		C.LinkFlags $(TARGET) : /EXPORT:luaopen_$(exportPath)$(exportName) ;
+	}
+
+	C.OutputName $(TARGET) : $(OUTPUT_NAME[1]) ;
+	if $(CONFIG) = debug {
+		C.OutputPostfix $(TARGET) : .debug ;
+	} else {
+		C.OutputPostfix $(TARGET) : ;
+	}
+	C.OutputPath $(TARGET) : $(LUA_CDIR)/$(MODULES_SUBDIR:E=) ;
+	C.Library $(TARGET) : $(SOURCES) : module ;
+
+	ProjectGroup LuaPlus : Modules : $(TARGET) ;
+	Workspace LuaPlus : $(TARGET) ;
+}
+
+
+rule Lua.CModule TARGET : OUTPUT_NAME : SOURCES : MODULES_SUBDIR {
+	SubInclude LUAPLUS Src Lua51Proxy : Lua51Proxy ;
+
+	TARGET = [ ActiveTarget $(TARGET) ] ;
+
+	Depends all : $(TARGET) ;
+
+	LuaPlusDefines $(TARGET) ;
+	C.IncludeDirectories $(TARGET) : $(LUAPLUS_INCLUDE_DIRECTORIES) ;
+
+	if ! $(OS) in MACOSX LINUX FREEBSD {
+		C.LinkLibraries $(TARGET) : $(LUA_VERSION) ;
+	}
+
+	OUTPUT_NAME ?= $(TARGET) ;
+
+	local MODULES_SUBDIR = $(OUTPUT_NAME[1]:D) ;
+	OUTPUT_NAME = $(OUTPUT_NAME[1]:D=) $(OUTPUT_NAME[2]) ;
+
+	if $(MSVCNT) {
+		local EXPORT_NAME = $(OUTPUT_NAME[2]:E=$(OUTPUT_NAME[1])) ;
+		local exportName = [ Subst $(EXPORT_NAME) : %. : _ ] ;
+		local exportPath = [ Subst $(MODULES_SUBDIR:E="") : / : _ ] ;
+		if $(exportPath) != "" {
+			exportPath = $(exportPath)_ ;
+		}
+		C.LinkFlags $(TARGET) : /EXPORT:luaopen_$(exportPath)$(exportName) ;
+	}
+
+	C.OutputName $(TARGET) : $(OUTPUT_NAME[1]) ;
+	if $(CONFIG) = debug {
+		C.OutputPostfix $(TARGET) : .debug ;
+	} else {
+		C.OutputPostfix $(TARGET) : ;
+	}
+	C.OutputPath $(TARGET) : $(LUA_CDIR)/$(MODULES_SUBDIR:E=) ;
+	C.Library $(TARGET) : $(SOURCES) : module ;
+
+	ProjectGroup LuaPlus : Modules : $(TARGET) ;
+	Workspace LuaPlus : $(TARGET) ;
+}
+
+
+rule Lua.Module TARGET : OUTPUT_NAME : SOURCES {
+	TARGET = [ ActiveTarget $(TARGET) ] ;
+
+	OUTPUT_NAME ?= $(TARGET) ;
+
+	local MODULES_SUBDIR = $(OUTPUT_NAME[1]:D) ;
+	OUTPUT_NAME = $(OUTPUT_NAME[1]:D=) ;
+
+	Depends all : $(TARGET) ;
+	NotFile $(TARGET) ;
+	Depends clean : clean:$(TARGET) ;
+	NotFile clean:$(TARGET) ;
+	Always clean:$(TARGET) ;
+
+	Project $(TARGET) : $(SOURCES) ;
+	ProjectGroup LuaPlus : Modules : $(TARGET) ;
+	Workspace LuaPlus : $(TARGET) ;
+}
+
+
+rule Lua.Use TARGET : OPTIONS : OUTPUT_DIRECTORY {
+	if build in $(OPTIONS) {
+		if shared in $(OPTIONS) {
+			SubInclude LUAPLUS Src LuaPlus : LuaPlusSharedLib ;
+		} else {
+			SubInclude LUAPLUS Src LuaPlus : LuaPlusStaticLib ;
+		}
+	}
+
+	TARGET = [ ActiveTarget $(TARGET) ] ;
+
+	LuaPlusDefines $(TARGET) ;
+
+	if shared in $(OPTIONS) {
+		C.Defines $(TARGET) : LUA_BUILD_AS_DLL ;
+	}
+
+	C.IncludeDirectories $(TARGET) : $(LUAPLUS_INCLUDE_DIRECTORIES) ;
+
+	if prebuilt in $(OPTIONS) {
+		if defaultdirectory in $(OPTIONS) {
+			OUTPUT_DIRECTORY ?= $(LUAPLUS_OUTPUT_DIRECTORY) ;
+		}
+		C.LinkDirectories $(TARGET) : $(OUTPUT_DIRECTORY) ;
+		if shared in $(OPTIONS) {
+			# Get rid of the -luaplus in the LUA_VERSION, because the name
+			# on disk will just be lua53, not lua53-luaplus.
+			local strippedName = [ Subst $(LUA_VERSION) : -luaplus : "" ] ;
+			if $(C.CONFIG) = debug {
+				strippedName = $(strippedName)_debug ;
+			}
+			C.LinkPrebuiltLibraries $(TARGET) : $(strippedName) ;
+		} else {
+			if $(C.CONFIG) = debug {
+				C.LinkPrebuiltLibraries $(TARGET) : $(LUA_VERSION)-static.debug ;
+			} else {
+				C.LinkPrebuiltLibraries $(TARGET) : $(LUA_VERSION)-static ;
+			}
+		}
+	} else if build in $(OPTIONS) {
+		if defaultdirectory in $(OPTIONS) {
+			OUTPUT_DIRECTORY ?= $(LUAPLUS_OUTPUT_DIRECTORY) ;
+		}
+		C.LinkDirectories $(TARGET) : $(OUTPUT_DIRECTORY) ;
+		if shared in $(OPTIONS) {
+			C.LinkLibraries $(TARGET) : $(LUA_VERSION) ;
+		} else {
+			C.LinkLibraries $(TARGET) : $(LUA_VERSION)-static ;
+		}
+	}
+}
+
+if ! $(TARGETINFO_LOCATE)
+{
+
+rule Lua.ToBinary PARENTS : TARGETS : SOURCES
+{
+	Depends $(TARGETS) : $(SOURCES) ;
+	Needs $(TARGETS) : $(LUAC_EXE) ;
+
+	Clean clean:$(PARENTS) : $(TARGETS) ;
+
+	_LuaToBinary $(TARGETS) : $(SOURCES) ;
+}
+
+actions _LuaToBinary
+{
+	$(LUAC_EXE:TC) -o $(1:C) $(2:C)
+}
+
+
+rule Lua.Bin2C PARENTS : TARGETS : SOURCES
+{
+	Depends $(TARGETS) : $(SOURCES) ;
+	Needs $(TARGETS) : $(LUA_EXE) ;
+
+	Clean clean:$(PARENTS) : $(TARGETS) ;
+
+	BIN2C on $(TARGETS) = $(LUAPLUS)/Tools/bin2c.lua ;
+	_LuaBin2C $(TARGETS) : $(SOURCES) ;
+}
+
+actions _LuaBin2C
+{
+	$(LUA_EXE:TC) $(BIN2C:C) $(2:C) > $(1:C)
+}
+
+}
+else
+{
+
+rule LuaToBinary
+{
+}
+
+
+rule Bin2C
+{
+}
+
+}
+
+
+
+Project !BuildWorkspace : $(LUAPLUS)/LUAPLUS.jamrules ;

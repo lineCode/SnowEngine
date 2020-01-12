@@ -1,0 +1,188 @@
+rule C.Toolchain.clang.android.Detect {
+    if ! $(EMSCRIPTEN_PATH) {
+        local emcc ;
+        if ! $(NT) {
+            local PATHS =
+                $(PATH)
+                ;
+            emcc = [ Glob $(PATHS) : emcc ] ;
+        } else {
+            local PATHS =
+                "c:/Program Files/Emscripten/emscripten/1.25.0"
+                $(PATH)
+                ;
+            emcc = [ Glob $(PATHS) : emcc.bat ] ;
+            if $(emcc) {
+                EMSCRIPTEN_PATH = $(emcc:D) ;
+            }
+        }
+    }
+
+    local SUFEXE = .js ;
+    if $(EMSCRIPTEN_HTML) {
+        SUFEXE = .html ;
+    }
+    C.Toolchain.clang.Setup $(EMSCRIPTEN_PATH) : .bc $(SUFEXE) ;
+
+    C.AR on $(C.COMPILER_SUITE_SYMBOL) = $(EMSCRIPTEN_PATH)/emar ;
+    C.CC on $(C.COMPILER_SUITE_SYMBOL) = $(EMSCRIPTEN_PATH)/emcc ;
+    C.C++ on $(C.COMPILER_SUITE_SYMBOL) = $(EMSCRIPTEN_PATH)/em++ ;
+    C.LINK on $(C.COMPILER_SUITE_SYMBOL) = $(EMSCRIPTEN_PATH)/emcc ;
+    C.RANLIB on $(C.COMPILER_SUITE_SYMBOL) = $(EMSCRIPTEN_PATH)/emranlib ;
+
+    return $(C.COMPILER) ;
+}
+
+# C.AutoDetect will check for an Android NDK install we can use, and will setup the following three variables:
+# 1. NDKROOT			- pointing to root of NDK, e.g. c:\android\android-ndk-r5 - setup by NDK install.
+# 2. NDK_TOOLCHAIN		- toolchain version (i.e. arm-eabi-4.4.0) - optional
+# 3. NDK_PLATFORM		- toolchain platform API (i.e. android-5) - optional
+
+rule C.Toolchain.clang.android.Detect
+{
+    if $(OS) in MACOSX
+    {
+        NDKROOT					?= /Developer/adt-bundle-mac-x86_64/android-ndk-r8d ;
+        NDK_PLATFORM			?= android-9 ;
+        ANDROID_SDK_PLATFORM	?= android-18 ;
+        ANDROID_SDK_ROOT		?= /Developer/adt-bundle-mac-x86_64/sdk ;
+		
+		# Arm.
+        NDK_TOOLCHAIN			?= arm-linux-androideabi-4.7 ;
+		NDK_TARGET_CPU			?= arm ;		
+		
+		# x86.
+        # NDK_TOOLCHAIN			?= x86-4.7 ;
+		# NDK_TARGET_CPU		?= x86 ;	
+    }
+    else if $(OS) = NT
+    {
+        # 1. NDKROOT
+        #NDKROOT = $(NDKROOT:J=" ") ;
+        local ndkRoot = $(NDKROOT:Z=$(C.COMPILER_SUITE_SYMBOL)) ;
+        if ! $(ndkRoot) {
+            local PATHS =
+                $(ProgramFiles(x86):J=$(SPACE))/Android/
+                c:/
+                d:/
+                e:/
+            ;
+
+            local PATH_SUFFIXES =
+                android-ndk-r12b
+                android-ndk-r10e
+            ;
+
+            local ndk-build = [ Glob $(PATHS)$(PATH_SUFFIXES) : ndk-build.cmd ndk-build ] ;
+            Echo $(PATHS)$(PATH_SUFFIXES) ;
+            Echo ndkbuild - $(ndk-build) ;
+            if $(ndk-build) {
+                ndkRoot = [ Match (.+)/ : $(ndk-build[1]) ] ;
+            } else {
+                ndkRoot = _ ;
+            }
+            NDKROOT on $(C.COMPILER_SUITE_SYMBOL) = $(ndkRoot) ;
+        }
+
+        if $(ndkRoot) = _ {
+            echo NDKROOT not set ;
+            return ;
+        }
+
+        NDKROOT = $(ndkRoot) ;
+
+        # 2. Toolchain version
+        NDK_TOOLCHAIN = $(NDK_TOOLCHAIN:J=" ") ;
+        if ! $(NDK_TOOLCHAIN)
+        {
+            NDK_TOOLCHAIN = [ Glob $(NDKROOT)/toolchains : arm-linux-androideabi-4.9/ ] ;
+            NDK_TOOLCHAIN = $(NDK_TOOLCHAIN:P) ;
+            NDK_TOOLCHAIN = $(NDK_TOOLCHAIN:D=) ;
+            if ! $(NDK_TOOLCHAIN)
+            {
+                Echo *** Warning \: NDK_TOOLCHAIN not set, and default 'arm-linux-androideabi-4.9' could not be found. Please set to desired toolchain version ;
+                return ;
+            }
+            else
+            {
+                Echo *** Warning \: NDK_TOOLCHAIN defaults to $(NDK_TOOLCHAIN) ;
+            }
+        }
+
+        # 3. Platform (API) version
+        NDK_PLATFORM = $(NDK_PLATFORM:J=" ") ;
+        if ! $(NDK_PLATFORM)
+        {
+            NDK_PLATFORM = [ Glob $(NDKROOT)/platforms : android-21/ ] ;
+            NDK_PLATFORM = $(NDK_PLATFORM:P) ;
+            NDK_PLATFORM = $(NDK_PLATFORM:D=) ;
+            if ! $(NDK_PLATFORM)
+            {
+                Echo *** Warning \: NDK_PLATFORM not set, and default 'android-21' could not be found. Please set to desired platform version ;
+                return ;
+            }
+            else
+            {
+                Echo *** Warning \: NDK_PLATFORM defaults to $(NDK_PLATFORM) ;
+            }
+        }
+		
+		# 4. Compiler prefix.
+		NDK_TARGET_CPU ?= arm ;
+    }
+	
+	# Based on NDK_TARGET_CPU set the NDK_COMPILER_PREFIX (if not already set).
+	switch $(NDK_TARGET_CPU)
+	{
+		case arm :
+			NDK_COMPILER_PREFIX ?= arm-linux-androideabi- ;
+		case x86 :
+			NDK_COMPILER_PREFIX ?= i686-linux-android- ;
+		case * :
+			Echo *** error \: Unable to detect compiler prefix for NDK based on '$(NDK_TARGET_CPU)' ;
+			return ;
+	}
+
+	switch $(OS)
+	{
+		case NT :
+			NDK_HOST	= "windows-x86_64" ;
+			HOST_SUFEXE = ".exe" ;
+		case CYGWIN :
+			NDK_HOST	= "windows" ;
+			HOST_SUFEXE = ".exe" ;
+		case MACOSX :
+			NDK_HOST	= "darwin-x86" ;
+			HOST_SUFEXE = "" ;
+		case * :
+			Echo *** Error \: Unable to detect host platform for NDK based on '$(OS)' ;
+			return ;
+	}
+
+Echo NDKROOT - $(NDKROOT) ;
+Echo NDK_TOOLCHAIN - $(NDK_TOOLCHAIN) ;
+Echo NDK_HOST - $(NDK_HOST) ;
+	NDK_TOOLCHAIN_ROOT = "$(NDKROOT)/toolchains/$(NDK_TOOLCHAIN)/prebuilt/$(NDK_HOST)" ;
+	Echo NDK_TOOLCHAIN_ROOT - $(NDK_TOOLCHAIN_ROOT) ;
+
+#	C.COMPILER = gcc ;
+#	C.COMPILER_SUITE = gcc ;
+#	C.COMPILER_SUITE_SYMBOL = !c.$(C.ACTIVE_TOOLCHAIN_GRIST).info! ;
+#
+#	C.ToolchainHelperOnce gcc ;
+#	C.ToolchainHelperOnce gcc-shared ;
+#
+#	######################################################################################################################
+#	C.AR on $(C.COMPILER_SUITE_SYMBOL)			= "$(NDK_TOOLCHAIN_ROOT)/bin/$(NDK_COMPILER_PREFIX)ar" ruc ;
+#	C.CC on $(C.COMPILER_SUITE_SYMBOL)			= "$(NDK_TOOLCHAIN_ROOT)/bin/$(NDK_COMPILER_PREFIX)gcc" ;
+#	C.C++ on $(C.COMPILER_SUITE_SYMBOL)			= "$(NDK_TOOLCHAIN_ROOT)/bin/$(NDK_COMPILER_PREFIX)g++" ;
+#	C.LINK on $(C.COMPILER_SUITE_SYMBOL)		= "$(NDK_TOOLCHAIN_ROOT)/bin/$(NDK_COMPILER_PREFIX)g++" ;
+#	C.RANLIB on $(C.COMPILER_SUITE_SYMBOL)		= "$(NDK_TOOLCHAIN_ROOT)/bin/$(NDK_COMPILER_PREFIX)ranlib" ;
+#	C.STRIP on $(C.COMPILER_SUITE_SYMBOL)		= "$(NDK_TOOLCHAIN_ROOT)/bin/$(NDK_COMPILER_PREFIX)strip" ;
+#
+#	if $(C.PLATFORM) != *  &&  $(C.CONFIG) != * {
+#		C.ToolchainHelperOnce gcc-android ;
+#	}
+
+	return $(C.COMPILER) ;
+}

@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{01B47F4F-C2A9-4C16-8C8B-B4846428089A}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>TeapotWarsDLL</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <ProjectName>EditorDLL</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetName>$(ProjectName)</TargetName>
+    <IncludePath>$(SolutionDir);$(SolutionDir)..\..\Engine\3rdParty\bullet-2.79\src;$(SolutionDir)..\..\Engine\3rdParty\DXUT11\Optional;$(SolutionDir)..\..\Engine\3rdParty\DXUT11\Core;$(SolutionDir)..\..\Engine\3rdParty\libogg-1.3.0\include;$(SolutionDir)..\..\Engine\3rdParty\libvorbis-1.3.2\include;$(SolutionDir)..\..\Engine\3rdParty\luaplus53\Src\LuaPlus\lua53-luaplus\src;$(SolutionDir)..\..\Engine\3rdParty\luaplus53\Src\LuaPlus;$(SolutionDir)..\..\Engine\3rdParty\tinyxml_2_6_2;$(SolutionDir)..\..\Engine\3rdParty\zlib-1.2.5;$(DXSDK_DIR)\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(VCInstallDir)PlatformSDK\lib;$(WindowsSDK_LibraryPath_x64);$(DXSDK_DIR)Lib\x64;$(LibraryPath);$(SolutionDir)..\..\Lib\$(PlatformName)$(Configuration)</LibraryPath>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetName>$(ProjectName)</TargetName>
+    <IncludePath>$(SolutionDir);$(SolutionDir)..\..\Engine\3rdParty\bullet-2.79\src;$(SolutionDir)..\..\Engine\3rdParty\DXUT11\Optional;$(SolutionDir)..\..\Engine\3rdParty\DXUT11\Core;$(SolutionDir)..\..\Engine\3rdParty\libogg-1.3.0\include;$(SolutionDir)..\..\Engine\3rdParty\libvorbis-1.3.2\include;$(SolutionDir)..\..\Engine\3rdParty\luaplus51-all\Src\LuaPlus;$(SolutionDir)..\..\Engine\3rdParty\tinyxml_2_6_2;$(SolutionDir)..\..\Engine\3rdParty\zlib-1.2.5;$(DXSDK_DIR)\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(VCInstallDir)PlatformSDK\lib;$(LibraryPath);$(SolutionDir)..\..\Lib\$(PlatformName)$(Configuration)</LibraryPath>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>x64;_DEBUG;_WINDOWS;_USRDLL;TEAPOTWARSDLL_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>EditorStd.h</PrecompiledHeaderFile>
+      <ProgramDataBaseFileName>$(OutDir)$(TargetName).pdb</ProgramDataBaseFileName>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\Lib\$(PlatformName)$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;engine.lib</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>libcmtd.lib</IgnoreSpecificDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;TEAPOTWARSDLL_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>EngineEditorStd.h</PrecompiledHeaderFile>
+      <ProgramDataBaseFileName>$(OutDir)$(TargetName).pdb</ProgramDataBaseFileName>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\Lib\$(PlatformName)$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;gamecode4_2015.lib</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="..\EditorDLL\Editor.aps" />
+    <None Include="..\EditorDLL\Editor.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\EditorDLL\Editor.h" />
+    <ClInclude Include="..\EditorDLL\EditorGlobalFunctions.h" />
+    <ClInclude Include="..\EditorDLL\EditorHumanView.h" />
+    <ClInclude Include="..\EditorDLL\resource.h" />
+    <ClInclude Include="EditorStd.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\EditorDLL\Editor.cpp" />
+    <ClCompile Include="..\EditorDLL\EditorGlobalFunctions.cpp" />
+    <ClCompile Include="..\EditorDLL\EditorHumanView.cpp" />
+    <ClCompile Include="EditorStd.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EditorStd.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\EditorDLL\Editor.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
