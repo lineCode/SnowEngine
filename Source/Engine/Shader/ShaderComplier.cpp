@@ -186,25 +186,30 @@ bool ShaderComplier::ParseCustomConfig(LObject& customConfigFunc)
 	}
 	std::vector<ShaderResourceItem> items=resourceMeta.GetItems();
 	for (auto iter = items.begin(); iter != items.end(); iter++) {
+		LObject globalsObj = scriptEnv.GetState()->GetGlobals();
+		LObject table = globalsObj.CreateTable(iter->name.c_str());
+		table.SetString("name", iter->name.c_str());
+		LObject getValueMetatable = scriptEnv.GetState()->GetGlobals().GetByName("getvalue_metatable");
+		table.SetMetatable(getValueMetatable);
+
 		switch (iter->type) {
 		case ShaderResourceType::FLOAT2 : {
-
+			table.SetString("type", "float2");
 		}break;
 		case ShaderResourceType::FLOAT3 : {
-
+			table.SetString("type", "float3");
 		}break;
 		case ShaderResourceType::FLOAT4: {
-
+			table.SetString("type", "float4");
 		}break;
 		case ShaderResourceType::MAT3x3: {
-
+			table.SetString("type", "float3x3");
 		}break;
 		case ShaderResourceType::MAT4x4: {
-
+			table.SetString("type", "float4x4");
 		}break;
 		default:break;
 		}
-
 	}
 }
 
