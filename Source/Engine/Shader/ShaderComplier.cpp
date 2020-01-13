@@ -175,13 +175,45 @@ string ShaderComplier::GeneratePSShaderResourceCode()
 	return textureCode + "\n" + sampleStateCode;
 }
 
+bool ShaderComplier::ParseCustomConfig(LObject& customConfigFunc)
+{
+	if (customConfigFunc.IsFunction() == false)
+		return false;
+	LuaPlus::LuaFunction<LObject> configfunc(customConfigFunc);
+	LObject customFuncTable = configfunc();
+	if (customFuncTable.IsTable()) {
+		//to be continue...
+	}
+	std::vector<ShaderResourceItem> items=resourceMeta.GetItems();
+	for (auto iter = items.begin(); iter != items.end(); iter++) {
+		switch (iter->type) {
+		case ShaderResourceType::FLOAT2 : {
+
+		}break;
+		case ShaderResourceType::FLOAT3 : {
+
+		}break;
+		case ShaderResourceType::FLOAT4: {
+
+		}break;
+		case ShaderResourceType::MAT3x3: {
+
+		}break;
+		case ShaderResourceType::MAT4x4: {
+
+		}break;
+		default:break;
+		}
+
+	}
+}
+
 bool ShaderComplier::Compile()
 {
 	if (fileName.empty()) return false;
 	scriptEnv.ExecuteString(luaCode.c_str());
 
 	LObject configFunc = scriptEnv.GetState()->GetGlobals().GetByName("config");
-
 	if (configFunc.IsNil()) return false;
 
 	LuaPlus::LuaFunction<LObject> func(configFunc);
@@ -192,13 +224,8 @@ bool ShaderComplier::Compile()
 
 	if (!strcmp(lightModel.GetString(), "custom")) {
 		auto customConfigFunc = configuration.GetByName("custom");
-		if (customConfigFunc.IsFunction() == false)
-			return false;
-		LuaPlus::LuaFunction<LObject> configfunc(customConfigFunc);
-		LObject customFuncTable = configfunc();
-		if (customFuncTable.IsTable()) {
-			//to be continue...
-		}
+		ParseCustomConfig(customConfigFunc);
+
 		//generate vs hlsl shader
 		if (!vsFunc.IsNil()) {
 			mode = Mode::vs;
@@ -213,6 +240,7 @@ bool ShaderComplier::Compile()
 			psReturnObj = func();
 		}
 		//generate vs
+		string vsBufferStrut=GenerateVSContantBufferCode();
 		string vsStructIn = "struct VertexIn\n{ \n  float3 positon:POSITION;\n"
 			"  float3 normal:NORMAL\n"
 			"  float2 texcord:TEXCORD\n"
@@ -246,7 +274,7 @@ bool ShaderComplier::Compile()
 		vsDef += "  return vs_out;\n}";
 
 		vsCodeLines.clear();
-		vsOutput = vsStructIn + vsStructOut + vsDef;
+		vsOutput = vsBufferStrut+vsStructIn + vsStructOut + vsDef;
 
 		//generate ps
 		string psResource = GeneratePSShaderResourceCode();
@@ -392,13 +420,13 @@ void ShaderComplier::AddFloat4A(const char* name, float x, float y, float z, flo
 #pragma region GlobalEnv Helpers
 LObject ShaderComplier::GetVal(LObject rTable)
 {
-	const char* RName = rTable.GetByName("name").GetString();
+	const char* rName = rTable.GetByName("name").GetString();
 	LObject table;
 	table.AssignNewTable(scriptEnv.GetState());
 	char temp[16];
 	sprintf_s(temp, "_Id%d", GetNewId());
 	table.SetString("name", temp);
-	table.SetString("raw", RName);
+	table.SetString("raw", rName);
 	string type = rTable.GetByName("type").GetString();
 	table.SetString("type", type.c_str());
 	LObject getValueMetatable = rTable.GetMetatable();
@@ -406,11 +434,11 @@ LObject ShaderComplier::GetVal(LObject rTable)
 		getValueMetatable = scriptEnv.GetState()->GetGlobals().GetByName("getvalue_metatable");
 	table.SetMetatable(getValueMetatable);
 	if (mode == Mode::vs) {
-		string statment = type + " " + string(temp) + "=" + RName + ";";
+		string statment = type + " " + string(temp) + "=" + rName + ";";
 		vsCodeLines.push_back(statment);
 	}
 	else if (mode == Mode::ps) {
-		string statment = type + " " + string(temp) + "=" + RName + ";";
+		string statment = type + " " + string(temp) + "=" + rName + ";";
 		psCodeLines.push_back(statment);
 	}
 	return table;

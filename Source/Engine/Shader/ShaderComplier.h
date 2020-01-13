@@ -30,6 +30,8 @@ public:
 	//Helper Functions
 private:
 	void InitEnv();
+	bool ParseCustomConfig(LObject& congfigFunction);
+
 	std::string GenerateVSContantBufferCode();
 	std::string GeneratePSShaderResourceCode();
 
@@ -92,6 +94,7 @@ private:
 	void AddMat4x4(const char* name);
 	void UseAo(bool useAo);
 	void UseShadow(bool useShadow);
+
 	//Global
 	LuaPlus::LuaObject GetVal(LObject);
 	LuaPlus::LuaObject GetMatrix(const char* key);
@@ -105,7 +108,7 @@ private:
 	LObject GetFloat3(LObject x, LObject y, LObject z);
 	LObject GetFloat4(LObject x, LObject y, LObject z, LObject w);
 
-	LObject  OperatorReload(LObject& l1, LObject& l2, const char* operators, const char* metaTable);
+	LObject OperatorReload(LObject& l1, LObject& l2, const char* operators, const char* metaTable);
 
 	LObject floatmul(LObject l1, LObject l2);
 	LObject floatadd(LObject l1, LObject l2);

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29609.76
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeapotWarsEditorApp_2015", "..\..\Editor\EditorApp\TeapotWarsEditorApp_2015.csproj", "{6183905E-44A0-4419-9288-B78B96CC1841}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor", "..\..\Editor\EditorApp\Editor.csproj", "{6183905E-44A0-4419-9288-B78B96CC1841}"
 	ProjectSection(ProjectDependencies) = postProject
 		{01B47F4F-C2A9-4C16-8C8B-B4846428089A} = {01B47F4F-C2A9-4C16-8C8B-B4846428089A}
 		{5F8DE669-F90C-498F-891B-EE6ACE0CA1BD} = {5F8DE669-F90C-498F-891B-EE6ACE0CA1BD}
