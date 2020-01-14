@@ -8,13 +8,12 @@
 #include<set>
 
 class MeshShader {
+	friend class ShaderManager;
+
 public:
 	MeshShader();
 	MeshShader(const char* fileName,int shaderModel=1);
 	~MeshShader();
-
-	//Init Shader 
-	void InitShaderEnv();
 
 public:
 	bool hasDefaultRes = false;
@@ -22,12 +21,14 @@ public:
 	ShaderResourceMeta shaderResourceMeta;
 
 protected:
+	std::string fileName;
+
 	ID3D11InputLayout* vertexLayout11;
 	ID3D11VertexShader* vertexShader;
 	ID3D11PixelShader* pixelShader;
 
-	HRESULT SetTexture(const std::string& textureName);
-	HRESULT SetTexture(ID3D11ShaderResourceView* const* pDiffuseRV, ID3D11SamplerState* const* ppSamplers);
+	ID3D11Buffer* cbMatrices;
+	ID3D11Buffer* cbCustom;
 };
 
 struct ID3DX11Effect;

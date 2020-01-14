@@ -28,6 +28,14 @@ public:
 	shared_ptr<MeshShaderInstance> AddMetrial(shared_ptr<SceneShaderNode> node,const std::string& fileName,const std::string& configFileName);
 
 private:
+	HRESULT ComplieHLSLShader(shared_ptr<MeshShader> shader,const std::string& vs, const std::string& ps);
+	HRESULT ComplieVs(shared_ptr<MeshShader> shader,const std::string& vs);
+	HRESULT SetVertexLayOut(shared_ptr<MeshShader> shader, ID3DBlob* pVertexShaderBuffer);
+	HRESULT CompliePs(shared_ptr<MeshShader> shader,const std::string& ps);
+
+	HRESULT CompileShader(LPCSTR pSrcData, SIZE_T SrcDataLen, LPCSTR pFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut);
+
+private:
 	static ShaderManager* instance;
 	ShaderManager();
 

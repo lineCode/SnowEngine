@@ -125,6 +125,7 @@ string ShaderComplier::GenerateVSContantBufferCode()
 		"float			nearz;\n"
 		"float			farz;\n"
 		"float			fov;\n"
+		"float			time\n"	
 		"}; ";
 
 	//Generate Custom Shader Buffer
@@ -271,7 +272,7 @@ bool ShaderComplier::Compile()
 		}
 		vsStructOut += "}\n\n";
 
-		string vsDef = "VertexOut VS(VertexIn vs_in)"
+		string vsDef = "VertexOut Vs(VertexIn vs_in)"
 		"{\n  VertexOut vs_out=(VertextOut)0.0f\n";
 
 		for (const auto& str : vsCodeLines) 

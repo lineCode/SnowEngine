@@ -15,7 +15,12 @@ MeshShader::MeshShader(const char* _fileName,int _shaderModel) :MeshShader()
 	
 }
 
-MeshShader::~MeshShader() {}
+MeshShader::~MeshShader() 
+{
+	SAFE_RELEASE(vertexLayout11);
+	SAFE_RELEASE(vertexShader);
+	SAFE_RELEASE(pixelShader);
+}
 
 #pragma endregion
 
