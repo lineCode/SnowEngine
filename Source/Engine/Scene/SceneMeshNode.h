@@ -69,16 +69,16 @@ public:
 class SceneMeshNode:public SceneShaderNode
 {
 public:
-	SceneMeshNode(const std::string& _meshName) :meshName(_meshName) {}
-	SceneMeshNode(const std::string& _meshName, const std::string& _materialName) :meshName(_meshName),
-	materialName(_materialName){}
+	//SceneMeshNode(const std::string& _meshName);
+	SceneMeshNode(const std::string& _meshName, const std::string& _materialName,const std::string& configName="");
 	
 	virtual HRESULT VOnRestore(Scene* pScene);
 	
 protected:
 	std::string meshName;
 	std::string materialName;
+	std::string configName;
 
-	MeshShaderInstance shaderInstance;
-	
+	shared_ptr<MeshShader> shader;
+	shared_ptr<MeshShaderInstance> instance;
 };

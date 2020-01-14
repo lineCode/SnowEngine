@@ -1,5 +1,6 @@
 #include"../Msvc/EngineStd.h"
 #include"SceneMeshNode.h"
+#include"../Shader/ShaderManager.h"
 
 unsigned int SceneMeshResourceLoader::VGetLoadedResourceSize(char* rawBuffer, unsigned int rawSize)
 {
@@ -114,3 +115,14 @@ void SceneModel::processMesh(aiMesh* mesh, const aiScene* scene, SceneMesh& scen
 	}
 }
 
+//SceneMeshNode::SceneMeshNode(const std::string& _meshName) :meshName(_meshName){}
+
+SceneMeshNode::SceneMeshNode(const std::string& _meshName, const std::string& _materialName, const std::string& _configName)
+	:meshName(_meshName),materialName(_materialName),configName(_configName)
+{
+}
+
+HRESULT SceneMeshNode::VOnRestore(Scene* pScene)
+{
+
+}

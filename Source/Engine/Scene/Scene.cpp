@@ -9,6 +9,7 @@
 
 #include "../Graphics3D/Geometry.h"
 #include "../Graphics3D/Lights.h"
+#include"../Shader/ShaderManager.h"
 
 // Scene Implementation
 
@@ -137,7 +138,7 @@ bool Scene::AddChild(ActorId id, shared_ptr<ISceneNode> kid)
 		DirectX::XMStoreFloat3(&m_SceneBox.Extents, E);
 		*/
 	}
-
+	kid->VGet()
 	return m_Root->VAddChild(kid); 
 }
 
