@@ -1,4 +1,4 @@
-// Lights.h - implements a simple light class for the GameCode4 scene graph
+// Lights.h - implements a simple light class
 
 #include "EngineStd.h"
 
@@ -75,7 +75,7 @@ void LightManager::CalcLighting(Scene *pScene)
 
 		if (count==0)
 		{
-			// Light 0 is the only one we use for ambient lighting. The rest are ignored in the simple shaders used for GameCode4.
+			// Light 0 is the only one we use for ambient lighting. The rest are ignored in the simple shaders
 			Color ambient = light->VGet()->GetMaterial().GetAmbient();
 			m_vLightAmbient = D3DXVECTOR4(ambient.r, ambient.g, ambient.b, 1.0f); 		
 		}

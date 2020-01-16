@@ -15,14 +15,20 @@ class TerrainShader {
 public:
 	TerrainShader() = delete;
 	TerrainShader(shared_ptr<TerrainHeightMap> _heightMap, PatchInfo _info);
+	~TerrainShader();
 
 	bool ComplieShader();
-	bool CreateVertexLayout();
 	bool BuildQuadPatchVB();
 	bool BuildQuadPatchIB();
 	bool BuildHeightmapSRV();
 
 private:
+	bool ComplieVsShader();
+	bool ComplieHsShader();
+	bool ComplieDsShader();
+	bool CompliePsShader();
+	bool CreateVertexLayoutAndBuffer();
+
 	PatchInfo patchInfo;
 	shared_ptr<TerrainHeightMap> heightMap;
 

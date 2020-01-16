@@ -221,9 +221,6 @@
     <ClCompile Include="..\NewScene\NSceneLightNode.cpp">
       <Filter>NewScene</Filter>
     </ClCompile>
-    <ClCompile Include="..\Render\SceneMeshRender.cpp">
-      <Filter>Render</Filter>
-    </ClCompile>
     <ClCompile Include="..\Terrain\Terrain.cpp">
       <Filter>Terrain</Filter>
     </ClCompile>
@@ -235,6 +232,12 @@
     </ClCompile>
     <ClCompile Include="..\Terrain\TerrainShader.cpp">
       <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Render\MeshRender.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Render\TerrainRender.cpp">
+      <Filter>Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -494,9 +497,6 @@
     <ClInclude Include="..\NewScene\NSceneLightNode.h">
       <Filter>NewScene</Filter>
     </ClInclude>
-    <ClInclude Include="..\Render\SceneMeshRender.h">
-      <Filter>Render</Filter>
-    </ClInclude>
     <ClInclude Include="..\Terrain\Terrain.h">
       <Filter>Terrain</Filter>
     </ClInclude>
@@ -508,6 +508,12 @@
     </ClInclude>
     <ClInclude Include="..\Terrain\TerrainShader.h">
       <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Render\MeshRender.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Render\TerrainRender.h">
+      <Filter>Render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

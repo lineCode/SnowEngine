@@ -1,5 +1,5 @@
 #pragma once
-// UserInterface.h : Defines UI elements of the GameCode4 application
+// UserInterface.h : Defines UI elements of the application
 
 
 #include "../Scene/Scene.h"

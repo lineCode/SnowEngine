@@ -2,6 +2,13 @@
 #include"TerrainShader.h"
 #include"Terrain.h"
 
+const D3D11_INPUT_ELEMENT_DESC TerrainVertexLayout[] =
+{
+	{ "PosL",  0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	{ "Tex",    0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	{ "BoundsY",  0, DXGI_FORMAT_R32G32_FLOAT,    0, 20, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+};
+
 struct Terrain
 {
 	XMFLOAT3 Pos;
@@ -10,17 +17,52 @@ struct Terrain
 };
 
 TerrainShader::TerrainShader(shared_ptr<TerrainHeightMap> _heightMap, PatchInfo _info)
-	:heightMap(_heightMap), patchInfo(_info),vertexLayout11(nullptr), vertexShader(nullptr),
-	hullShader(nullptr),domainShader(nullptr),pixelShader(nullptr), quadPatchVB(nullptr), 
-	quadPatchIB(nullptr),heightMapSRV(nullptr), layerMapArraySRV(nullptr),blendMapSRV(nullptr)
+	:heightMap(_heightMap), patchInfo(_info), vertexLayout11(nullptr), vertexShader(nullptr),
+	hullShader(nullptr), domainShader(nullptr), pixelShader(nullptr), quadPatchVB(nullptr),
+	quadPatchIB(nullptr), heightMapSRV(nullptr), layerMapArraySRV(nullptr), blendMapSRV(nullptr)
 {}
 
+TerrainShader::~TerrainShader()
+{
+	SAFE_RELEASE(vertexLayout11);
+	SAFE_RELEASE(vertexShader);
+	SAFE_RELEASE(hullShader);
+	SAFE_RELEASE(domainShader);
+	SAFE_RELEASE(pixelShader);
+	SAFE_RELEASE(quadPatchIB);
+	SAFE_RELEASE(quadPatchVB);
+	SAFE_RELEASE(heightMapSRV);
+	SAFE_RELEASE(layerMapArraySRV);
+	SAFE_RELEASE(blendMapSRV);
+}
+
 bool TerrainShader::ComplieShader()
+{
+	Resource resource("Effects//Terrain.hlsl");
+	auto handle= g_pApp->m_ResCache->GetHandle(&resource);
+
+}
+bool TerrainShader::ComplieVsShader()
 {
 
 }
 
-bool TerrainShader::CreateVertexLayout()
+bool TerrainShader::ComplieHsShader()
+{
+
+}
+
+bool TerrainShader::ComplieDsShader()
+{
+
+}
+
+bool TerrainShader::CompliePsShader()
+{
+
+}
+
+bool TerrainShader::CreateVertexLayoutAndBuffer()
 {
 
 }

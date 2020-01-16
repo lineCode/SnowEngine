@@ -1,6 +1,6 @@
 #pragma once
 
-// HumanView.h : Defines the HumanView class of the GameCode4 application
+// HumanView.h : Defines the HumanView class of the application
 
 //
 // class HumanView - 

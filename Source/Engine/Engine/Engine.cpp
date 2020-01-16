@@ -411,8 +411,7 @@ LRESULT CALLBACK Engine::MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 		case WM_CLOSE:
 		{
 			// DXUT apps choose ESC key as a default exit command.
-			// GameCode4 doesn't like this so we disable it by checking 
-			// the m_bQuitting bool, and if we're not really quitting
+			// we disable it by checking the m_bQuitting bool, and if we're not really quitting
 			// set the "no further processing" parameter to true.
 			if (g_pApp->m_bQuitting)
 			{

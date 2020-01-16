@@ -40,7 +40,7 @@ public:
 //
 // D3DMeshNode9 Description
 //
-//    Attaches a ID3DXMesh Mesh object to the GameCode4 scene graph
+//    Attaches a ID3DXMesh Mesh object to the scene graph
 //    This is a creature of D3D9, and not described in the 4th edition.
 //    In the 3rd edition this was called D3DMeshNode
 //
@@ -78,7 +78,7 @@ public:
 //
 // D3DShaderMeshNode9 Description
 //
-//    Attaches a ID3DXMesh Mesh object to the GameCode4 scene graph and renders it with a shader.
+//    Attaches a ID3DXMesh Mesh object to the scene graph and renders it with a shader.
 //    This is a creature of D3D9, and not described in the 4th edition.
 //    In the 3rd edition this was called D3DShaderMeshNode
 //

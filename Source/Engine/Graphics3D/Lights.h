@@ -1,5 +1,5 @@
 #pragma once
-// Lights.h - implements a simple light class for the GameCode4 scene graph
+// Lights.h - implements a simple light class for the scene graph
 
 #include "D3DRenderer.h"
 #include "Geometry.h"

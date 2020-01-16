@@ -1,48 +1,13 @@
-//========================================================================
 // Sprite.cpp : Defines sprites
-//
-// Part of the GameCode2 Application
-//
-// GameCode2 is the sample application that encapsulates much of the source code
-// discussed in "Game Coding Complete - 2nd Edition" by Mike McShaffry, published by
-// Paraglyph Press. ISBN: 1-932111-91-3
-//
-// If this source code has found it's way to you, and you think it has helped you
-// in any way, do the author a favor and buy a new copy of the book - there are 
-// detailed explanations in it that compliment this code well. Buy a copy at Amazon.com
-// by clicking here: http://www.amazon.com/exec/obidos/ASIN/1932111913/gamecodecompl-20/
-//
-// There's also a companion web site at http://www.mcshaffry.com/GameCode/portal.php
-//
-// (c) Copyright 2005 Michael L. McShaffry
-//
-// This work is licensed under the Creative Commons Attribution-ShareAlike License. 
-// To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/1.0/ 
-// or send a letter to:
-//      Creative Commons
-//      559 Nathan Abbott Way
-//      Stanford, California 94305, USA.
-//
-//========================================================================
 
-//========================================================================
-//  Content References in Game Coding Complete 2nd Edition
-// 
-// 
-// class Sprite			- Chapter 10, page 313
-//
-//========================================================================
-
-#include "GameCodeStd.h"
-#include "../GameCode4/GameCode.h"
+#include "../Msvc/EngineStd.h"
+#include "../Engine/Engine.h"
 #include "../Utilities/String.h"
 #include "Sprite.h"
 //#include "CopyAlpha.h"
 #include "Font.h"
 
-
-// 
-// Sprite::Sprite - Chapter 10, page 315
+// Sprite::Sprite
 //
 Sprite::Sprite()
 {
@@ -62,18 +27,14 @@ Sprite::Sprite()
 	m_ZOrder = ZORDER_LAYER2;
 };
 
-// 
-// Sprite::VOnRestore - Chapter 10, page 315
-//
+// Sprite::VOnRestore
 HRESULT Sprite::VOnRestore()
 {
 	SAFE_RELEASE(m_d3dSprite);
 	return (D3DXCreateSprite(DXUTGetD3D9Device(), &m_d3dSprite)==S_OK);
 }
 
-// 
-// Sprite::VOnRestore - Chapter 10, page 319
-//
+// Sprite::VOnRestore
 HRESULT Sprite::VOnRender(double fTime, float fElapsedTime)
 {
 	CPoint actualPos( m_Position - m_Hotspot );
@@ -96,9 +57,7 @@ HRESULT Sprite::VOnRender(double fTime, float fElapsedTime)
 	return S_OK;
 }
 
-// 
-// Sprite::VOnRestore - Chapter 10, page 321
-//
+// Sprite::VOnRestore 
 void Sprite::VOnUpdate(int deltaMS)
 {
 	if (m_IsPaused)
@@ -130,11 +89,7 @@ void Sprite::VOnUpdate(int deltaMS)
 	}
 }
 
-
-
-// 
-// BitmapSprite::BitmapSprite - Chapter 10, page 322
-//
+// BitmapSprite::BitmapSprite
 BitmapSprite::BitmapSprite(const std::string fileName, bool inCache, const int frames)
 {
 	m_fileName = fileName;
@@ -142,9 +97,7 @@ BitmapSprite::BitmapSprite(const std::string fileName, bool inCache, const int f
 	m_bInCache = inCache;
 }
 
-// 
-// BitmapSprite::VOnRestore - Chapter 10, page 322
-//
+// BitmapSprite::VOnRestore
 HRESULT BitmapSprite::VOnRestore()
 {
 	if (FAILED (Sprite::VOnRestore() ) )
@@ -206,9 +159,6 @@ HRESULT BitmapSprite::VOnRestore()
 	return true;
 }
 
-
-
-
 TextSprite::TextSprite(
 	std::wstring text,			// the text to draw
 	TextStyle style, 			// the style of the text
@@ -226,8 +176,6 @@ TextSprite::TextSprite(
 	m_Position = position;
 	m_NumFrames = 1;
 };
-
-
 
 HRESULT TextSprite::VOnRestore()
 {
@@ -363,7 +311,6 @@ HRESULT TextSprite::VOnRestore()
     return true;
 }
 
-
 HRESULT TextSprite::VOnRender(double fTime, float fElapsedTime)
 {
 	CPoint actualPos( m_Position - m_Hotspot );
@@ -394,6 +341,3 @@ void TextSprite::SetText(const std::wstring text)
 		VOnRestore();
 	}
 }
-
-
-
