@@ -1,35 +1,29 @@
 #pragma once
-//========================================================================
 // ResCache.h : Defines a simple resource cache.
-
-//========================================================================
 
 class ResHandle;
 class ResCache;
 
 #include "ZipFile.h"			// needed for ZipContentsMap
 
-//
 // class IResourceExtraData		 (see notes below)
 //
 //   This isn't mentioned specifically on that page, but it is a class that can attach extra data to 
 //   a particular resource. Best example is storing the length and format of a sound file. 
 //   There's a great discussion of this in Chapter 13, "Game Audio"
-//
+
 class IResourceExtraData
 {
 public:
-	virtual std::string VToString()=0;
+	virtual std::string VToString() = 0;
 };
 
-//
-//  class Resource			
-//
+//  class Resource
 class Resource
 {
 public:
 	std::string m_name;
-	Resource(const std::string &name); 
+	Resource(const std::string& name);
 };
 
 //
@@ -38,27 +32,25 @@ public:
 //    This class implements the IResourceFile interface with a ZipFile.
 class ResourceZipFile : public IResourceFile
 {
-	ZipFile *m_pZipFile;
+	ZipFile* m_pZipFile;
 	std::wstring m_resFileName;
 
 public:
-	ResourceZipFile(const std::wstring resFileName ) { m_pZipFile = NULL; m_resFileName=resFileName; }
+	ResourceZipFile(const std::wstring resFileName) { m_pZipFile = NULL; m_resFileName = resFileName; }
 	virtual ~ResourceZipFile();
 
 	virtual bool VOpen();
-	virtual int VGetRawResourceSize(const Resource &r);
-	virtual int VGetRawResource(const Resource &r, char *buffer);
+	virtual int VGetRawResourceSize(const Resource& r);
+	virtual int VGetRawResource(const Resource& r, char* buffer);
 	virtual int VGetNumResources() const;
 	virtual std::string VGetResourceName(int num) const;
-    virtual bool VIsUsingDevelopmentDirectories(void) const { return false; }
+	virtual bool VIsUsingDevelopmentDirectories(void) const { return false; }
 };
 
-//
 // class DevelopmentResourceZipFile							- not discussed in the book
 //
 //    This class fakes a ZIP file from a normal directory, and is used in the 
 //    editor.
-//
 class DevelopmentResourceZipFile : public ResourceZipFile
 {
 public:
@@ -76,67 +68,58 @@ public:
 	DevelopmentResourceZipFile(const std::wstring resFileName, const Mode mode);
 
 	virtual bool VOpen();
-	virtual int VGetRawResourceSize(const Resource &r);
-	virtual int VGetRawResource(const Resource &r, char *buffer);
+	virtual int VGetRawResourceSize(const Resource& r);
+	virtual int VGetRawResource(const Resource& r, char* buffer);
 	virtual int VGetNumResources() const;
 	virtual std::string VGetResourceName(int num) const;
-    virtual bool VIsUsingDevelopmentDirectories(void) const { return true; }
+	virtual bool VIsUsingDevelopmentDirectories(void) const { return true; }
 
-	int Find(const std::string &path);
+	int Find(const std::string& path);
 
 protected:
 	void ReadAssetsDirectory(std::wstring fileSpec);
 };
 
-//
-//  class ResHandle			
-//
 class ResHandle
 {
 	friend class ResCache;
 	friend class ScriptResourceLoader;
-
+	friend class HeightMapLoader;
 protected:
 	Resource m_resource;
-	char *m_buffer;	
+	char* m_buffer;
 	unsigned int m_size;
 	shared_ptr<IResourceExtraData> m_extra;
-	ResCache *m_pResCache;
+	ResCache* m_pResCache;
 
 public:
-	ResHandle(Resource & resource, char *buffer, unsigned int size, ResCache *pResCache);
+	ResHandle(Resource& resource, char* buffer, unsigned int size, ResCache* pResCache);
 
 	virtual ~ResHandle();
 
 	const std::string GetName() { return m_resource.m_name; }
-	unsigned int Size() const { return m_size; } 
-	char *Buffer() const { return m_buffer; }
-	char *WritableBuffer() { return m_buffer; }
+	unsigned int Size() const { return m_size; }
+	char* Buffer() const { return m_buffer; }
+	char* WritableBuffer() { return m_buffer; }
 
 	shared_ptr<IResourceExtraData> GetExtra() { return m_extra; }
 	void SetExtra(shared_ptr<IResourceExtraData> extra) { m_extra = extra; }
 };
 
-//
-// class DefaultResourceLoader							
-//
 class DefaultResourceLoader : public IResourceLoader
 {
 public:
 	virtual bool VUseRawFile() { return true; }
 	virtual bool VDiscardRawBufferAfterLoad() { return true; }
-	virtual unsigned int VGetLoadedResourceSize(char *rawBuffer, unsigned int rawSize) { return rawSize; }
-	virtual bool VLoadResource(char *rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle) { return true; }
+	virtual unsigned int VGetLoadedResourceSize(char* rawBuffer, unsigned int rawSize) { return rawSize; }
+	virtual bool VLoadResource(char* rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle) { return true; }
 	virtual std::string VGetPattern() { return "*"; }
 
 };
 
-//
-//  class ResCache										
-//
-typedef std::list< shared_ptr <ResHandle > > ResHandleList;					// lru list
-typedef std::map<std::string, shared_ptr < ResHandle  > > ResHandleMap;		// maps indentifiers to resource data
-typedef std::list< shared_ptr < IResourceLoader > > ResourceLoaders;
+using ResHandleList = std::list< shared_ptr <ResHandle > >;					// lru list
+using ResHandleMap = std::map<std::string, shared_ptr < ResHandle  > >;		// maps indentifiers to resource data
+using ResourceLoaders = std::list< shared_ptr < IResourceLoader > >;
 
 class ResCache
 {
@@ -146,7 +129,7 @@ class ResCache
 	ResHandleMap m_resources;
 	ResourceLoaders m_resourceLoaders;
 
-	IResourceFile *m_file;
+	IResourceFile* m_file;
 
 	unsigned int			m_cacheSize;			// total memory size
 	unsigned int			m_allocated;			// total memory allocated
@@ -154,34 +137,31 @@ class ResCache
 protected:
 
 	bool MakeRoom(unsigned int size);
-	char *Allocate(unsigned int size);
+	char* Allocate(unsigned int size);
 	void Free(shared_ptr<ResHandle> gonner);
 
-	shared_ptr<ResHandle> Load(Resource * r);
-	shared_ptr<ResHandle> Find(Resource * r);
+	shared_ptr<ResHandle> Load(Resource* r);
+	shared_ptr<ResHandle> Find(Resource* r);
 	void Update(shared_ptr<ResHandle> handle);
 
 	void FreeOneResource();
 	void MemoryHasBeenFreed(unsigned int size);
 
 public:
-	ResCache(const unsigned int sizeInMb, IResourceFile *file);
+	ResCache(const unsigned int sizeInMb, IResourceFile* file);
 	virtual ~ResCache();
 
-	bool Init(); 
-	
-	void RegisterLoader( shared_ptr<IResourceLoader> loader );
+	bool Init();
 
-	shared_ptr<ResHandle> GetHandle(Resource * r);
+	void RegisterLoader(shared_ptr<IResourceLoader> loader);
 
-	int Preload(const std::string pattern, void (*progressCallback)(int, bool &));
+	shared_ptr<ResHandle> GetHandle(Resource* r);
+
+	int Preload(const std::string pattern, void (*progressCallback)(int, bool&));
 	std::vector<std::string> Match(const std::string pattern);
 
 	void Flush(void);
 
-    bool IsUsingDevelopmentDirectories(void) const { GCC_ASSERT(m_file); return m_file->VIsUsingDevelopmentDirectories(); }
+	bool IsUsingDevelopmentDirectories(void) const { GCC_ASSERT(m_file); return m_file->VIsUsingDevelopmentDirectories(); }
 
 };
-
-
-

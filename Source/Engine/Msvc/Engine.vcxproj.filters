@@ -200,9 +200,6 @@
     <ClCompile Include="..\Shader\ShaderResource.cpp">
       <Filter>Shader</Filter>
     </ClCompile>
-    <ClCompile Include="..\Render\SceneRender.cpp">
-      <Filter>Render</Filter>
-    </ClCompile>
     <ClCompile Include="..\Scene\SceneShaderNode.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
@@ -214,6 +211,30 @@
     </ClCompile>
     <ClCompile Include="..\Script\StandAloneLuaEnv.cpp">
       <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="..\NewScene\NScene.cpp">
+      <Filter>NewScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\NewScene\NSceneNode.cpp">
+      <Filter>NewScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\NewScene\NSceneLightNode.cpp">
+      <Filter>NewScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Render\SceneMeshRender.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Terrain\Terrain.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Terrain\TerrainSceneNode.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shader\MeshNode.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Terrain\TerrainShader.cpp">
+      <Filter>Terrain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -452,9 +473,6 @@
     <ClInclude Include="..\Shader\ShaderManager.h">
       <Filter>Shader</Filter>
     </ClInclude>
-    <ClInclude Include="..\Render\SceneRender.h">
-      <Filter>Render</Filter>
-    </ClInclude>
     <ClInclude Include="..\Scene\SceneShaderNode.h">
       <Filter>Scene</Filter>
     </ClInclude>
@@ -466,6 +484,30 @@
     </ClInclude>
     <ClInclude Include="..\Script\StandAloneLuaEnv.h">
       <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="..\NewScene\NScene.h">
+      <Filter>NewScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\NewScene\NSceneNode.h">
+      <Filter>NewScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\NewScene\NSceneLightNode.h">
+      <Filter>NewScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Render\SceneMeshRender.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Terrain\Terrain.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Terrain\TerrainSceneNode.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shader\MeshNode.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Terrain\TerrainShader.h">
+      <Filter>Terrain</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -528,6 +570,12 @@
     </Filter>
     <Filter Include="Graphics2D">
       <UniqueIdentifier>{f59d8762-7f1f-4b6c-a479-a27917c92f33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Terrain">
+      <UniqueIdentifier>{86642e94-d126-479a-b390-541d71cd69aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NewScene">
+      <UniqueIdentifier>{1b003965-fce5-4ab6-96a6-349290ba9680}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

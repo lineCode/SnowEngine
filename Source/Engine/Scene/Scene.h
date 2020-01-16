@@ -11,6 +11,7 @@ class SkyNode;
 class LightNode;
 class LightManager;
 class SceneMeshNode;
+
 class Scene
 {
 protected:

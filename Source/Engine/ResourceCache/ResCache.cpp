@@ -435,8 +435,6 @@ void ResCache::Update(shared_ptr<ResHandle> handle)
 	m_lru.push_front(handle);
 }
 
-
-
 //
 // ResCache::Allocate								
 //
