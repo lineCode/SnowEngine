@@ -42,6 +42,7 @@ bool TerrainShader::ComplieShader()
 	auto handle= g_pApp->m_ResCache->GetHandle(&resource);
 
 }
+
 bool TerrainShader::ComplieVsShader()
 {
 

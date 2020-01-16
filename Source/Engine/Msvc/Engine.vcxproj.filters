@@ -239,6 +239,9 @@
     <ClCompile Include="..\Render\TerrainRender.cpp">
       <Filter>Render</Filter>
     </ClCompile>
+    <ClCompile Include="..\Render\ParticleRender.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Actors\Actor.h">
@@ -515,6 +518,12 @@
     <ClInclude Include="..\Render\TerrainRender.h">
       <Filter>Render</Filter>
     </ClInclude>
+    <ClInclude Include="..\Render\RenderResource.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Render\ParticleRender.h">
+      <Filter>Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Audio">
@@ -582,6 +591,12 @@
     </Filter>
     <Filter Include="NewScene">
       <UniqueIdentifier>{1b003965-fce5-4ab6-96a6-349290ba9680}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animation">
+      <UniqueIdentifier>{9423edc0-3f12-4bcb-87e7-d5afdb49a387}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Particle">
+      <UniqueIdentifier>{595cecab-daf1-4c7f-a1d7-8d801f5a23f7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

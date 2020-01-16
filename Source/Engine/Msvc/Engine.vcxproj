@@ -154,6 +154,8 @@
     <ClInclude Include="..\NewScene\NScene.h" />
     <ClInclude Include="..\NewScene\NSceneNode.h" />
     <ClInclude Include="..\Render\MeshRender.h" />
+    <ClInclude Include="..\Render\ParticleRender.h" />
+    <ClInclude Include="..\Render\RenderResource.h" />
     <ClInclude Include="..\Render\TerrainRender.h" />
     <ClInclude Include="..\Scene\SceneShaderNode.h" />
     <ClInclude Include="..\Script\LuaStateManager.h" />
@@ -243,6 +245,7 @@
     <ClCompile Include="..\NewScene\NScene.cpp" />
     <ClCompile Include="..\NewScene\NSceneNode.cpp" />
     <ClCompile Include="..\Render\MeshRender.cpp" />
+    <ClCompile Include="..\Render\ParticleRender.cpp" />
     <ClCompile Include="..\Render\TerrainRender.cpp" />
     <ClCompile Include="..\Scene\SceneShaderNode.cpp" />
     <ClCompile Include="..\Script\LuaStateManager.cpp" />

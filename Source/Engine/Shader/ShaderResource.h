@@ -164,4 +164,3 @@ struct cbMatrices
 	float fov;
 	float time;
 };
-
