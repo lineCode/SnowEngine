@@ -170,9 +170,6 @@
     <ClCompile Include="..\Graphics3D\MeshNode.cpp">
       <Filter>Graphics3D</Filter>
     </ClCompile>
-    <ClCompile Include="..\Scene\SceneMeshNode.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
     <ClCompile Include="..\Shader\ShaderComplier.cpp">
       <Filter>Shader</Filter>
     </ClCompile>
@@ -213,22 +210,19 @@
       <Filter>Script</Filter>
     </ClCompile>
     <ClCompile Include="..\NewScene\NScene.cpp">
-      <Filter>NewScene</Filter>
+      <Filter>NScene</Filter>
     </ClCompile>
     <ClCompile Include="..\NewScene\NSceneNode.cpp">
-      <Filter>NewScene</Filter>
+      <Filter>NScene</Filter>
     </ClCompile>
     <ClCompile Include="..\NewScene\NSceneLightNode.cpp">
-      <Filter>NewScene</Filter>
+      <Filter>NScene</Filter>
     </ClCompile>
     <ClCompile Include="..\Terrain\Terrain.cpp">
       <Filter>Terrain</Filter>
     </ClCompile>
     <ClCompile Include="..\Terrain\TerrainSceneNode.cpp">
       <Filter>Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Shader\MeshNode.cpp">
-      <Filter>Shader</Filter>
     </ClCompile>
     <ClCompile Include="..\Terrain\TerrainShader.cpp">
       <Filter>Terrain</Filter>
@@ -241,6 +235,42 @@
     </ClCompile>
     <ClCompile Include="..\Render\ParticleRender.cpp">
       <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Render\SceneRender.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\NewScene\NMeshNode.cpp">
+      <Filter>NScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\NewScene\NSceneOctree.cpp">
+      <Filter>NScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shader\Complier\GLSLShaderComplier.cpp">
+      <Filter>Shader\Complier</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shader\Complier\HLSLShaderComplier.cpp">
+      <Filter>Shader\Complier</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Render\RHI\RenderCommandList.cpp">
+      <Filter>Render\RHI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Render\RHI\OpenGLRHI.cpp">
+      <Filter>Render\RHI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Render\RHI\RHI.cpp">
+      <Filter>Render\RHI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Render\RHI\RHICommandListExecutor.cpp">
+      <Filter>Render\RHI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Render\RHI\RHICommandListImmediate.cpp">
+      <Filter>Render\RHI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Render\RHI\DX11RHI.cpp">
+      <Filter>Render\RHI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Render\RHI\RHIResource.cpp">
+      <Filter>Render\RHI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -452,9 +482,6 @@
     <ClInclude Include="..\Graphics3D\MeshNode.h">
       <Filter>Graphics3D</Filter>
     </ClInclude>
-    <ClInclude Include="..\Scene\SceneMeshNode.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="..\Shader\ShaderComplier.h">
       <Filter>Shader</Filter>
     </ClInclude>
@@ -492,22 +519,19 @@
       <Filter>Script</Filter>
     </ClInclude>
     <ClInclude Include="..\NewScene\NScene.h">
-      <Filter>NewScene</Filter>
+      <Filter>NScene</Filter>
     </ClInclude>
     <ClInclude Include="..\NewScene\NSceneNode.h">
-      <Filter>NewScene</Filter>
+      <Filter>NScene</Filter>
     </ClInclude>
     <ClInclude Include="..\NewScene\NSceneLightNode.h">
-      <Filter>NewScene</Filter>
+      <Filter>NScene</Filter>
     </ClInclude>
     <ClInclude Include="..\Terrain\Terrain.h">
       <Filter>Terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\Terrain\TerrainSceneNode.h">
       <Filter>Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Shader\MeshNode.h">
-      <Filter>Shader</Filter>
     </ClInclude>
     <ClInclude Include="..\Terrain\TerrainShader.h">
       <Filter>Terrain</Filter>
@@ -523,6 +547,42 @@
     </ClInclude>
     <ClInclude Include="..\Render\ParticleRender.h">
       <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Render\SceneRender.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\NewScene\NMeshNode.h">
+      <Filter>NScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\NewScene\NSceneOctree.h">
+      <Filter>NScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shader\Complier\GLSLShaderComplier.h">
+      <Filter>Shader\Complier</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shader\Complier\HLSLShaderComplier.h">
+      <Filter>Shader\Complier</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Render\RHI\RenderCommandList.h">
+      <Filter>Render\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Render\RHI\OpenGLRHI.h">
+      <Filter>Render\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Render\RHI\RHIResource.h">
+      <Filter>Render\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Render\RHI\RHI.h">
+      <Filter>Render\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Render\RHI\RHICommandListImmediate.h">
+      <Filter>Render\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Render\RHI\RHICommandListExecutor.h">
+      <Filter>Render\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Render\RHI\DX11RHI.h">
+      <Filter>Render\RHI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -589,14 +649,20 @@
     <Filter Include="Terrain">
       <UniqueIdentifier>{86642e94-d126-479a-b390-541d71cd69aa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="NewScene">
-      <UniqueIdentifier>{1b003965-fce5-4ab6-96a6-349290ba9680}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Animation">
       <UniqueIdentifier>{9423edc0-3f12-4bcb-87e7-d5afdb49a387}</UniqueIdentifier>
     </Filter>
     <Filter Include="Particle">
       <UniqueIdentifier>{595cecab-daf1-4c7f-a1d7-8d801f5a23f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NScene">
+      <UniqueIdentifier>{1b003965-fce5-4ab6-96a6-349290ba9680}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\Complier">
+      <UniqueIdentifier>{85618250-c520-4750-b8af-25b30b523ce6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\RHI">
+      <UniqueIdentifier>{6bac9c28-16ca-421c-a191-2eddb6b20bd2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

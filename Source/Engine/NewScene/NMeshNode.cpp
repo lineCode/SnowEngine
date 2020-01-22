@@ -1,40 +1,6 @@
 #include"../Msvc/EngineStd.h"
-#include"SceneMeshNode.h"
+#include"NMeshNode.h"
 #include"../Shader/ShaderManager.h"
-
-unsigned int SceneMeshResourceLoader::VGetLoadedResourceSize(char* rawBuffer, unsigned int rawSize)
-{
-	return rawSize;
-}
-
-bool SceneMeshResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle)
-{
-	Engine::Renderer renderer = Engine::GetRendererImpl();
-	if (renderer == Engine::Renderer_D3D9)
-	{
-		GCC_ASSERT(0 && "This is not supported in D3D9");
-	}
-	else if (renderer == Engine::Renderer_D3D11)
-	{
-		shared_ptr<SceneMeshResourceExtraData> extra = shared_ptr<SceneMeshResourceExtraData>(GCC_NEW SceneMeshResourceExtraData());
-		Assimp::Importer importer;
-		const aiScene* scene=importer.ReadFileFromMemory(rawBuffer, rawSize, 
-			aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_MakeLeftHanded);
-
-		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
-		{
-			GCC_ERROR(importer.GetErrorString()); 
-			return false;
-		}
-		extra->sceneModel.processNode(scene->mRootNode, scene);
-		handle->SetExtra(extra);
-
-		return true;
-	}
-
-	GCC_ASSERT(0 && "Unsupported Renderer in MeshResourceLoader::VLoadResource");
-	return false;
-}
 
 void SceneModel::processNode(aiNode* node, const aiScene* scene)
 {
@@ -109,20 +75,53 @@ void SceneModel::processMesh(aiMesh* mesh, const aiScene* scene, SceneMesh& scen
 		{
 			aiString str;
 			material->GetTexture(aType, i, &str);
-			std::string name = std::string(TEXTTURE_TYPE_STR[t]) + "_" + std::to_string(i);
+			string name = string(TEXTTURE_TYPE_STR[t]) + "_" + std::to_string(i);
 			defaultTextures.push_back(ShaderTexture(name, str.C_Str(), type));
 		}
 	}
 }
 
-//SceneMeshNode::SceneMeshNode(const std::string& _meshName) :meshName(_meshName){}
+//NMeshNode::NMeshNode(const string& _meshName) :meshName(_meshName){}
 
-SceneMeshNode::SceneMeshNode(const std::string& _meshName, const std::string& _materialName, const std::string& _configName)
-	:meshName(_meshName),materialName(_materialName),configName(_configName)
+NMeshNode::NMeshNode(const string& _meshName, const string& _materialName, const string& _configName)
+	:meshName(_meshName), materialName(_materialName), configName(_configName)
+{}
+
+HRESULT NMeshNode::VOnRestore(Scene* pScene)
 {
+
 }
 
-HRESULT SceneMeshNode::VOnRestore(Scene* pScene)
+unsigned int SceneMeshResourceLoader::VGetLoadedResourceSize(char* rawBuffer, unsigned int rawSize)
 {
+	return rawSize;
+}
 
+bool SceneMeshResourceLoader::VLoadResource(char* rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle)
+{
+	Engine::Renderer renderer = Engine::GetRendererImpl();
+	if (renderer == Engine::Renderer_D3D9)
+	{
+		GCC_ASSERT(0 && "This is not supported in D3D9");
+	}
+	else if (renderer == Engine::Renderer_D3D11)
+	{
+		shared_ptr<SceneMeshResourceExtraData> extra = shared_ptr<SceneMeshResourceExtraData>(GCC_NEW SceneMeshResourceExtraData());
+		Assimp::Importer importer;
+		const aiScene* scene = importer.ReadFileFromMemory(rawBuffer, rawSize,
+			aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_MakeLeftHanded);
+
+		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+		{
+			GCC_ERROR(importer.GetErrorString());
+			return false;
+		}
+		extra->sceneModel.processNode(scene->mRootNode, scene);
+		handle->SetExtra(extra);
+
+		return true;
+	}
+
+	GCC_ASSERT(0 && "Unsupported Renderer in MeshResourceLoader::VLoadResource");
+	return false;
 }

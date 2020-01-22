@@ -12,8 +12,6 @@
 //  class Quaternion		- 
 //  class Plane				- 
 //  class Frustum			- 
-//
-
 
 const float  GCC_PI = 3.14159265358979f;
 const float  GCC_2PI = 2 * GCC_PI;
@@ -26,13 +24,7 @@ const float  GCC_2PI = 2 * GCC_PI;
 
 typedef D3DXVECTOR2 Vec2;
 
-////////////////////////////////////////////////////
-//
 // Vec3 Description
-//
-//
-////////////////////////////////////////////////////
-
 class Vec3 : public D3DXVECTOR3 
 {
 public:
@@ -97,14 +89,7 @@ extern Vec4 g_Forward4;
 typedef std::list<Vec3> Vec3List;
 typedef std::list<Vec4> Vec4List;
 
-////////////////////////////////////////////////////
-//
 // Quaternion Description
-//
-//
-////////////////////////////////////////////////////
-
-
 class Quaternion : public D3DXQUATERNION
 {
 public:

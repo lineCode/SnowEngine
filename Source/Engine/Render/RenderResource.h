@@ -1,6 +1,13 @@
 #pragma once
 
 namespace Render {
+	enum  RenderType {
+		StaticMesh,
+		SkeletonMesh,
+		SkyBox,
+		Particle,
+		Terrain
+	};
 
 	enum  RenderPass {
 		BackGround = 1000,
@@ -18,3 +25,5 @@ namespace Render {
 		AlphaVertex
 	};
 }
+
+extern const int INVAILD_ACOTR_ID = 0x7fffffff;

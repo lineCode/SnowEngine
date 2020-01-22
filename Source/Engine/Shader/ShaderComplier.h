@@ -59,7 +59,7 @@ private:
 	std::vector<ShaderTexture> shaderTextures;
 
 private:
-	int GetNewId() { static int count = 0; return ++count; }
+	int GetRandomNewId() { static int count = 0; return ++count; }
 	enum class Mode { config, vs, ps };
 	Mode mode = Mode::config;
 	//Resource

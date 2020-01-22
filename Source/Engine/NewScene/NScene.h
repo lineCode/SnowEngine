@@ -1,16 +1,38 @@
 #pragma once
-
 #include"NSceneNode.h"
+#include"../Render/SceneRender.h"
+
 #include<vector>
 #include<map>
 #include<memory>
 
-using ActorId = int;
+using std::vector;
+using std::map;
+using std::shared_ptr;
 
-class NScene {
-protected:
-	std::map<ActorId, std::shared_ptr<NSceneNode> > actorMap;
-	std::vector<std::shared_ptr<NSceneNode>> allSceneNodes;
+class SceneRender;
 
+class NScene final{
 public:
+	NScene();
+	~NScene();
+
+	void SetCamera(shared_ptr<NCameraNode> _camera);
+	const shared_ptr<NCameraNode> GetCamera() const;
+
+	bool AddSceneNode(ActorId id, shared_ptr<NSceneNode> node);
+	bool AddSceneNode(shared_ptr<NSceneNode> node);
+
+	HRESULT OnRender() ;
+
+protected:
+	map<ActorId, shared_ptr<NSceneNode> > actorMap;
+	vector<shared_ptr<NSceneNode>> allSceneNodes;
+
+	shared_ptr<NCameraNode> camera;
+	
+	SceneRender* sceneRender;
+
+private:
+	int GetRandomNewId();
 };

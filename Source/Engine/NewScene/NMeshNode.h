@@ -1,47 +1,67 @@
 #pragma once
 #include"../Engine/Engine.h"
-#include"Scene.h"
-#include"SceneShaderNode.h"
+#include"NSceneNode.h"
 #include"../Shader/ShaderResource.h"
 #include"../Shader/MeshShader.h"
+
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+
 #include <string>
 #include <vector>
 
-struct Vertex 
+using std::string;
+using std::vector;
+
+struct Vertex
 {
 	XMFLOAT3 position;
 	XMFLOAT3 normal;
-	XMFLOAT3 tangent=XMFLOAT3(0.0f,0.0f, 0.0f);
+	XMFLOAT3 tangent = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	XMFLOAT3 bitangent = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	XMFLOAT2 texCoords=XMFLOAT2(0.0f,0.0f);
+	XMFLOAT2 texCoords = XMFLOAT2(0.0f, 0.0f);
 };
 
-class SceneMesh 
+class SceneMesh
 {
 public:
 	SceneMesh() = default;
-	SceneMesh(const std::vector<Vertex>& _vertices,const std::vector<unsigned int>& _indices,const std::vector<ShaderTexture>& _textures) 
-	:vertices(_vertices),indices(_indices),textures(_textures){}
+	SceneMesh(const vector<Vertex>& _vertices, const vector<unsigned int>& _indices, const vector<ShaderTexture>& _textures)
+		:vertices(_vertices), indices(_indices), textures(_textures) {}
 
-	std::vector<Vertex> vertices;
-	std::vector<unsigned int> indices;
-	std::vector<ShaderTexture> textures;
+	vector<Vertex> vertices;
+	vector<unsigned int> indices;
+	vector<ShaderTexture> textures;
 };
 
-class SceneModel 
+class SceneModel
 {
 	friend class SceneMeshResourceLoader;
 public:
-	std::vector<SceneMesh> meshes;
-	std::vector<ShaderTexture> defaultTextures;
+	vector<SceneMesh> meshes;
+	vector<ShaderTexture> defaultTextures;
 
 private:
 	void processNode(aiNode* node, const aiScene* scene);
 	void processMesh(aiMesh* mesh, const aiScene* scene, SceneMesh& sceneMesh);
+};
 
+class NMeshNode :public NSceneNode 
+{
+public:
+	//SceneMeshNode(const string& _meshName);
+	NMeshNode(const string& _meshName, const string& _materialName, const string& configName = "");
+
+	virtual HRESULT VOnRestore(Scene* pScene);
+
+protected:
+	string meshName;
+	string materialName;
+	string configName;
+
+	shared_ptr<MeshShader> shader;
+	shared_ptr<MeshShaderInstance> instance;
 };
 
 class SceneMeshResourceExtraData : public IResourceExtraData
@@ -51,7 +71,7 @@ class SceneMeshResourceExtraData : public IResourceExtraData
 public:
 	SceneMeshResourceExtraData() { };
 	virtual ~SceneMeshResourceExtraData() { }
-	virtual std::string VToString() { return "SceneMeshResourceExtraData"; }
+	virtual string VToString() { return "SceneMeshResourceExtraData"; }
 
 	SceneModel sceneModel;
 };
@@ -63,22 +83,5 @@ public:
 	virtual bool VDiscardRawBufferAfterLoad() { return true; }
 	virtual unsigned int VGetLoadedResourceSize(char* rawBuffer, unsigned int rawSize);
 	virtual bool VLoadResource(char* rawBuffer, unsigned int rawSize, shared_ptr<ResHandle> handle);
-	virtual std::string VGetPattern() { return "*.fbx"; }
-};
-
-class SceneMeshNode:public SceneShaderNode
-{
-public:
-	//SceneMeshNode(const std::string& _meshName);
-	SceneMeshNode(const std::string& _meshName, const std::string& _materialName,const std::string& configName="");
-	
-	virtual HRESULT VOnRestore(Scene* pScene);
-	
-protected:
-	std::string meshName;
-	std::string materialName;
-	std::string configName;
-
-	shared_ptr<MeshShader> shader;
-	shared_ptr<MeshShaderInstance> instance;
+	virtual string VGetPattern() { return "*.fbx"; }
 };

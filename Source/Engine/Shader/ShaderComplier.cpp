@@ -430,7 +430,7 @@ LObject ShaderComplier::GetVal(LObject rTable)
 	LObject table;
 	table.AssignNewTable(scriptEnv.GetState());
 	char temp[16];
-	sprintf_s(temp, "_Id%d", GetNewId());
+	sprintf_s(temp, "_Id%d", GetRandomNewId());
 	table.SetString("name", temp);
 	table.SetString("raw", rName);
 	string type = rTable.GetByName("type").GetString();

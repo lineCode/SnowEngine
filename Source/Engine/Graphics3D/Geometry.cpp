@@ -1,6 +1,5 @@
 // Geometry.cpp : Collection of code for 3D math and 3D shapes
-
-#include "EngineStd.h"
+#include "../Msvc/EngineStd.h"
 #include "Geometry.h"
 
 //========================================================================
@@ -235,8 +234,6 @@ bool IntersectTriangle( const Vec3& orig, const Vec3& dir,
     return TRUE;
 }
 
-
-
 bool TriangleIterator::InitializeStrippedMesh(LPDIRECT3DVERTEXBUFFER9 pVerts, int stride, int strips, int *triCountList )
 {
 	char *pVertices = NULL;
@@ -284,6 +281,4 @@ void *TriangleIterator::VGet(unsigned int i)
 	GCC_ASSERT(i<m_Size);
 	return &m_Triangles[i*3]; 
 }
-
-
 
